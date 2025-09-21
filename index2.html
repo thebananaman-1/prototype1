@@ -69,13 +69,11 @@
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transform: translate(-50%, -50%) scale(0.95);
   display: none;
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
-
-  /* Animation setup */
-  transform: translate(-50%, -50%) scale(0.95);
   opacity: 0;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
@@ -84,6 +82,12 @@
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
+
+.popup.closing {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
 
 
 
@@ -196,6 +200,9 @@
     height: 135px;
     border-radius: 8px;
   }
+  .popup {
+  transition: transform 0.2s ease, opacity 0.2s ease, left 0.05s linear, top 0.05s linear;
+  }
 </style>
 </head>
 <body>
@@ -284,6 +291,8 @@
       <div class="dev-grid">
         <span class="tool-tag">HTML/CSS</span>
         <span class="tool-tag">JavaScript</span>
+        <span class="tool-tag">React</span>
+        <span class="tool-tag">Next.js</span>
       </div>
     </div>
 
@@ -298,80 +307,87 @@
 </div>
 
 <script>
-  function openPopup(id){
-    const popup = document.getElementById(id);
-    popup.style.display = "flex";
+function openPopup(id) {
+  const popup = document.getElementById(id);
+  if (!popup) return;
 
-    // Reset to center before showing
-    popup.style.left = "50%";
-    popup.style.top = "50%";
-    popup.style.transform = ""; // let CSS handle animation
+  // Reset popup position & state BEFORE showing
+  popup.style.display = 'flex';
+  popup.style.left = '50%';
+  popup.style.top = '50%';
+  popup.style.transform = 'translate(-50%, -50%) scale(0.95)';
+  popup.classList.remove('show');
 
-    requestAnimationFrame(() => popup.classList.add("show"));
+  // Force reflow so CSS animation can restart
+  void popup.offsetWidth;
+
+  // Add show class (triggers CSS animation)
+  popup.classList.add('show');
+}
+
+function closePopup(id) {
+  const popup = document.getElementById(id);
+  if (!popup) return;
+
+  popup.classList.remove('show');
+  popup.classList.add('closing');
+
+  // Wait for animation, then hide completely
+  setTimeout(() => {
+    popup.style.display = 'none';
+    popup.classList.remove('closing');
+  }, 200); // matches CSS transition duration
 }
 
 
+// --- Button hookups ---
+document.getElementById("openAbout")?.addEventListener('click', () => openPopup('aboutPopup'));
+document.getElementById("openLinks")?.addEventListener('click', () => openPopup('linksPopup'));
+document.getElementById("openWork")?.addEventListener('click', () => openPopup('workPopup'));
 
-  function closePopup(id){
-    const popup = document.getElementById(id);
-    popup.classList.remove("show");
-    setTimeout(()=>{
-      popup.style.display = "none";
+document.querySelectorAll('.close-btn').forEach(btn => {
+  btn.addEventListener('click', () => closePopup(btn.dataset.close));
+});
 
-      // Reset position after closing so it reopens centered
-      popup.style.left = "50%";
-      popup.style.top = "50%";
-      popup.style.transform = "translate(-50%, -50%)";
-    }, 200);
-  }
+// --- Dragging logic (no shake version) ---
+document.querySelectorAll('.popup').forEach(popup => {
+  const header = popup.querySelector('.popup-header');
+  if (!header) return;
 
-  document.getElementById("openAbout").onclick = () => openPopup("aboutPopup");
-  document.getElementById("openLinks").onclick = () => openPopup("linksPopup");
-  document.getElementById("openWork").onclick = () => openPopup("workPopup");
+  let isDragging = false, offsetX = 0, offsetY = 0;
 
-  document.querySelectorAll(".close-btn").forEach(btn => {
-    btn.addEventListener("click", ()=> closePopup(btn.dataset.close));
-  });
-
-  // --- Dragging Logic ---
-document.querySelectorAll(".popup").forEach(popup => {
-  const header = popup.querySelector(".popup-header");
-  let isDragging = false;
-  let offsetX = 0, offsetY = 0;
-
-  header.addEventListener("mousedown", e => {
+  header.addEventListener('mousedown', e => {
     isDragging = true;
+
+    // Get current position BEFORE removing transform
     const rect = popup.getBoundingClientRect();
+
+    // Freeze popup in place by setting exact left/top from current screen position
+    popup.style.left = rect.left + "px";
+    popup.style.top = rect.top + "px";
+
+    // Remove translate so future left/top updates work smoothly
+    popup.style.transform = "scale(1)";
+
+    // Calculate cursor offset relative to popup
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
-
-    popup.style.transition = "none";
-    popup.style.transform = "translate(0, 0)"; // disable center translate
-    popup.style.left = rect.left + window.scrollX + "px"; // account for scroll
-    popup.style.top = rect.top + window.scrollY + "px";
   });
 
-  document.addEventListener("mousemove", e => {
+  document.addEventListener('mousemove', e => {
     if (!isDragging) return;
-
-    let newLeft = e.clientX - offsetX;
-    let newTop = e.clientY - offsetY;
-
-    // Prevent dragging completely off-screen (optional, feels nicer)
-    const maxX = window.innerWidth - popup.offsetWidth;
-    const maxY = window.innerHeight - popup.offsetHeight;
-    newLeft = Math.max(0, Math.min(newLeft, maxX));
-    newTop = Math.max(0, Math.min(newTop, maxY));
-
-    popup.style.left = newLeft + "px";
-    popup.style.top = newTop + "px";
+    popup.style.left = (e.clientX - offsetX) + "px";
+    popup.style.top = (e.clientY - offsetY) + "px";
   });
 
-  document.addEventListener("mouseup", () => isDragging = false);
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
 });
 
 </script>
 
+
+
 </body>
 </html>
-
