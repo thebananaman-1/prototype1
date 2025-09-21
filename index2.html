@@ -59,7 +59,7 @@
   .menu-item:hover { opacity:0.8; }
 
   /* --- Shared popup styles --- */
-  .popup {
+.popup {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -76,8 +76,9 @@
   overflow: hidden;
   z-index: 10;
   opacity: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.3s ease, color 0.3s ease;
 }
+
 
 .popup.show {
   opacity: 1;
@@ -204,9 +205,181 @@
   .popup {
   transition: transform 0.2s ease, opacity 0.2s ease, left 0.05s linear, top 0.05s linear;
   }
+  .theme-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  float: right;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.theme-btn:hover { transform: scale(1.2); }
+
+/* --- Dark mode styles --- */
+body.dark {
+  background: #121212;
+  color: #f5f5f5;
+}
+
+body.dark .card {
+  background: #1e1e1e;
+  color: #f5f5f5;
+}
+
+body.dark .navbar,
+body.dark .popup-header {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+body.dark .popup {
+  background: #1e1e1e;
+  color: #f5f5f5;
+  border-color: #333;
+}
+
+body.dark .popup-footer {
+  background: #2a2a2a;
+  border-top-color: #444;
+  color: #ccc;
+}
+
+/* ✅ Fix the text under the icons in dark mode */
+body.dark .link-item span {
+  color: #f5f5f5; /* Light text for dark background */
+}
+
+/* ✅ Also ensure links themselves are visible */
+body.dark .link-item {
+  color: #f5f5f5;
+}
+
+body.dark .tool-tag {
+  background: #2a2a2a;  /* darker gray so it blends with dark mode */
+  border: 1px solid #444;
+  color: #f5f5f5;       /* ✅ makes text readable */
+}
+
+body, 
+.card, 
+.popup, 
+.popup-header, 
+.popup-footer, 
+.tool-tag {
+  transition: 
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.2s ease;
+}
+
+/* Floating Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 100;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+.dark-mode .theme-toggle {
+  background: rgba(40, 40, 40, 0.7);
+  color: #fff;
+}
+
+/* Light/Dark Mode Background Transition */
+body {
+  transition: background 0.4s ease, color 0.3s ease;
+}
+.dark-mode {
+  background: linear-gradient(to bottom, #121212 62%, #1e1e1e 100%);
+  color: white;
+}
+.dark-mode .card {
+  background: #1e1e1e;
+  color: white;
+}
+.dark-mode .navbar {
+  background: #2c2c2c;
+}
+.dark-mode .popup {
+  background: #2a2a2a;
+  color: #f5f5f5;
+  border-color: #444;
+}
+.dark-mode .popup-header {
+  background: #3a3a3a;
+  color: #fff;
+}
+.dark-mode .link-item {
+  color: #f5f5f5; /* Makes link text readable */
+}
+
+.dark-mode .link-item:hover {
+  text-decoration: underline;
+  color: #ffffff; /* Slightly brighter on hover */
+}
+.dark-mode .popup-footer {
+  background: #1e1e1e;  /* darker background */
+  border-top: 1px solid #444;
+  color: #ddd; /* softer white text */
+}
+.dark-mode .work-section h3 {
+  color: #ffffff; /* make headings visible in dark mode */
+}
+.dark-mode .tool-tag {
+  background: #2b2b2b; /* darker chip background */
+  border: 1px solid #555;
+  color: #f1f1f1;
+}
+/* Remove purple highlight in popups and card content */
+.card-content, .popup-body {
+  user-select: text;
+}
+
+.card-content *, .popup-body * {
+  /* override selection highlight for all nested elements */
+}
+
+.card-content p::selection,
+.card-content span::selection,
+.card-content a::selection,
+.popup-body p::selection,
+.popup-body span::selection,
+.popup-body a::selection {
+  background: transparent;
+  color: inherit;
+}
+
+.card-content p::-moz-selection,
+.card-content span::-moz-selection,
+.card-content a::-moz-selection,
+.popup-body p::-moz-selection,
+.popup-body span::-moz-selection,
+.popup-body a::-moz-selection {
+  background: transparent;
+  color: inherit;
+}
+
 </style>
 </head>
 <body>
+<!-- Light/Dark Mode Toggle -->
+<button id="themeToggle" class="theme-toggle">🌞</button>
 
 <!-- Main card -->
 <div class="card">
@@ -385,6 +558,23 @@ document.querySelectorAll('.popup').forEach(popup => {
     isDragging = false;
   });
 });
+
+// --- Light/Dark Mode Toggle ---
+const themeToggle = document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  // Change icon dynamically
+  if (document.body.classList.contains("dark-mode")) {
+    themeToggle.textContent = "🌙";
+  } else {
+    themeToggle.textContent = "🌞";
+  }
+});
+
+
+
 
 </script>
 
