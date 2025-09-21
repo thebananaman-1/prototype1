@@ -17,7 +17,7 @@
 
   /* --- Main window --- */
   .card {
-    width: 420px;
+    width: 500px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0,0,0,0.18);
@@ -59,28 +59,33 @@
 
   /* --- Shared popup styles --- */
   .popup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 460px;
-    max-width: 95vw;
-    max-height: 80vh;
-    background: white;
-    border: 1px solid #dcdcdc;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transform: translate(-50%, -50%) scale(0.95);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 10;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    opacity: 0;
-  }
-  .popup.show {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 460px;
+  max-width: 95vw;
+  max-height: 80vh;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+
+  /* Animation setup */
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+
 
   .popup-header {
     background: #3a3a3a;
@@ -114,7 +119,7 @@
     margin:0 auto 12px;
   }
   .about h2 {
-    color:#ff9a00;
+    color:#3686e2;
     margin-bottom: 0;
     text-align:center;
   }
@@ -153,29 +158,71 @@
     border-top: 1px solid #e0e0e0;
     color:#555;
   }
+
+  /* --- Work popup specific styles --- */
+  .popup-body.work {
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .work-section {
+    margin-bottom: 20px;
+  }
+  .work-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+  .tools-grid, .dev-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tool-tag {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .video-grid iframe {
+    width: 100%;
+    height: 135px;
+    border-radius: 8px;
+  }
 </style>
 </head>
 <body>
 
-  <!-- Main card -->
-  <div class="card">
-    <div class="navbar">home</div>
-    <div class="card-content">
-      <h1>hi! <span style="color:#3686e2">I’m James</span></h1>
-      <p>illustrator, animator, and developer</p>
+<!-- Main card -->
+<div class="card">
+  <div class="navbar">home</div>
+  <div class="card-content">
+    <h1>hi! <span style="color:#3686e2">I’m James</span></h1>
+    <p>illustrator, animator, and developer</p>
 
-      <div class="menu">
-        <div class="menu-item" id="openAbout">
-          <img src="about-icon.png" alt="about">
-          about
-        </div>
-        <div class="menu-item" id="openLinks">
-          <img src="links-icon.png" alt="links">
-          links
-        </div>
+    <div class="menu">
+      <div class="menu-item" id="openAbout">
+        <img src="https://img.icons8.com/ios-filled/50/info.png" alt="about">
+        about
+      </div>
+      <div class="menu-item" id="openLinks">
+        <img src="https://img.icons8.com/ios-filled/50/link.png" alt="links">
+        links
+      </div>
+      <div class="menu-item" id="openWork">
+        <img src="https://img.icons8.com/ios-filled/50/folder-invoices.png" alt="work">
+        work
       </div>
     </div>
   </div>
+</div>
 
   <!-- About popup -->
   <div class="popup" id="aboutPopup">
@@ -187,7 +234,7 @@
       <h2>James (@.thebananaman_)</h2>
       <p>a Filipino illustrator, animator and<br>
       a newbie at web developing</p>
-      <p>hi! i'm James, an animator and illustrator. i...</p>
+      <p>hi! i'm James, an animator and illustrator. I...</p>
       <ul>
         <li>create <a href="#">hand-drawn animations</a></li>
         <li>create <a href="#">videos</a> about school logs</li>
@@ -204,56 +251,127 @@
       links <span class="close-btn" data-close="linksPopup">[x]</span>
     </div>
     <div class="popup-body links">
-      <a class="link-item" href="#"><img src="icons/twitter.png"><span>twitter</span></a>
-      <a class="link-item" href="#"><img src="icons/youtube.png"><span>youtube</span></a>
-      <a class="link-item" href="#"><img src="icons/kofi.png"><span>ko-fi</span></a>
-      <a class="link-item" href="#"><img src="icons/discord.png"><span>discord</span></a>
-      <a class="link-item" href="#"><img src="icons/instagram.png"><span>instagram</span></a>
+      <a class="link-item" href="https://www.roblox.com/users/692397387/profile"><img src="icons/roblox.png"><span>roblox</span></a>
+      <a class="link-item" href="https://www.youtube.com/@ARandomCreatedChannel"><img src="icons/youtube.png"><span>youtube</span></a>
+      <a class="link-item" href="https://discord.gg/MRVpDVegbJ"><img src="icons/discord.png"><span>discord</span></a>
+      <a class="link-item" href="https://open.spotify.com/user/31uso52ved3k2rt4jwymkoszqx6q"><img src="icons/spotify.png">spotify</a>
     </div>
-    <div class="popup-footer">clicking any of the links will open a new tab!</div>
+    <div class="popup-footer">clicking any of the links will direct you to my accounts!</div>
   </div>
+
+  <!-- Work popup -->
+<div class="popup" id="workPopup">
+  <div class="popup-header">
+    work <span class="close-btn" data-close="workPopup">[x]</span>
+  </div>
+  <div class="popup-body work">
+    <div class="work-section">
+      <p><strong>Accepting work offers</strong> via my <a href="#">work email</a>!</p>
+    </div>
+
+    <div class="work-section">
+      <h3>TOOLS</h3>
+      <div class="tools-grid">
+        <span class="tool-tag">Adobe Animate</span>
+        <span class="tool-tag">Ibis Paint X</span>
+        <span class="tool-tag">CapCut</span>
+        <span class="tool-tag">Flipaclip</span>
+      </div>
+    </div>
+
+    <div class="work-section">
+      <h3>DEVELOPMENT</h3>
+      <div class="dev-grid">
+        <span class="tool-tag">HTML/CSS</span>
+        <span class="tool-tag">JavaScript</span>
+        <span class="tool-tag">React</span>
+        <span class="tool-tag">Next.js</span>
+      </div>
+    </div>
+
+    <div class="work-section">
+      <h3>ILLUSTRATIONS</h3>
+      <div class="video-grid">
+        <img src="https://cdn.discordapp.com/attachments/1354565225990455627/1417595027353505913/Screenshot_20250916_231108_ibisPaint_X.jpg?ex=68d053c0&is=68cf0240&hm=a0d2dda1b94de86bfc9cfc7be1f68f6d0829df2995749ec5a3a8d2a413dbd532&" alt="image1" width="350" height="400">
+        <img src="https://cdn.discordapp.com/attachments/1354565225990455627/1408078149857837066/Untitled22_20250821174821-1.jpg?ex=68d0a437&is=68cf52b7&hm=f0c8f0bf17c6b42bf3bd5572dde78100d090368cbf670301e0213f73adee1df2&" alt="image" width="350" height="175">
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   function openPopup(id){
     const popup = document.getElementById(id);
     popup.style.display = "flex";
-    requestAnimationFrame(()=> popup.classList.add("show"));
-  }
+
+    // Reset to center before showing
+    popup.style.left = "50%";
+    popup.style.top = "50%";
+    popup.style.transform = ""; // let CSS handle animation
+
+    requestAnimationFrame(() => popup.classList.add("show"));
+}
+
+
+
   function closePopup(id){
     const popup = document.getElementById(id);
     popup.classList.remove("show");
-    setTimeout(()=> popup.style.display = "none", 200);
+    setTimeout(()=>{
+      popup.style.display = "none";
+
+      // Reset position after closing so it reopens centered
+      popup.style.left = "50%";
+      popup.style.top = "50%";
+      popup.style.transform = "translate(-50%, -50%)";
+    }, 200);
   }
 
   document.getElementById("openAbout").onclick = () => openPopup("aboutPopup");
   document.getElementById("openLinks").onclick = () => openPopup("linksPopup");
+  document.getElementById("openWork").onclick = () => openPopup("workPopup");
+
   document.querySelectorAll(".close-btn").forEach(btn => {
     btn.addEventListener("click", ()=> closePopup(btn.dataset.close));
   });
 
   // --- Dragging Logic ---
-  document.querySelectorAll(".popup").forEach(popup => {
-    const header = popup.querySelector(".popup-header");
-    let isDragging = false;
-    let offsetX = 0, offsetY = 0;
+document.querySelectorAll(".popup").forEach(popup => {
+  const header = popup.querySelector(".popup-header");
+  let isDragging = false;
+  let offsetX = 0, offsetY = 0;
 
-    header.addEventListener("mousedown", e => {
-      isDragging = true;
-      const rect = popup.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-      popup.style.transition = "none"; // disable animation while dragging
-    });
+  header.addEventListener("mousedown", e => {
+    isDragging = true;
+    const rect = popup.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
 
-    document.addEventListener("mousemove", e => {
-      if (!isDragging) return;
-      popup.style.left = e.clientX - offsetX + "px";
-      popup.style.top = e.clientY - offsetY + "px";
-      popup.style.transform = "translate(0, 0) scale(1)";
-    });
-
-    document.addEventListener("mouseup", () => isDragging = false);
+    popup.style.transition = "none";
+    popup.style.transform = "translate(0, 0)"; // disable center translate
+    popup.style.left = rect.left + window.scrollX + "px"; // account for scroll
+    popup.style.top = rect.top + window.scrollY + "px";
   });
+
+  document.addEventListener("mousemove", e => {
+    if (!isDragging) return;
+
+    let newLeft = e.clientX - offsetX;
+    let newTop = e.clientY - offsetY;
+
+    // Prevent dragging completely off-screen (optional, feels nicer)
+    const maxX = window.innerWidth - popup.offsetWidth;
+    const maxY = window.innerHeight - popup.offsetHeight;
+    newLeft = Math.max(0, Math.min(newLeft, maxX));
+    newTop = Math.max(0, Math.min(newTop, maxY));
+
+    popup.style.left = newLeft + "px";
+    popup.style.top = newTop + "px";
+  });
+
+  document.addEventListener("mouseup", () => isDragging = false);
+});
+
 </script>
 
 </body>
