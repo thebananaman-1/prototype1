@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>James' Portfolio</title>
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(to bottom, #ffffff 62%, #dff2ff 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+  }
+
+  /* --- Main window --- */
+  .card {
+    width: 420px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.18);
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .navbar {
+    background:#3a3a3a;
+    color:white;
+    text-align:left;
+    padding:12px 18px;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .card-content {
+    padding: 36px 24px;
+  }
+  .menu {
+    display:flex;
+    justify-content:center;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .menu-item {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    cursor:pointer;
+    font-weight:600;
+    font-size:0.85rem;
+  }
+  .menu-item img {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 4px;
+  }
+  .menu-item:hover { opacity:0.8; }
+
+  /* --- Shared popup styles --- */
+  .popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 460px;
+    max-width: 95vw;
+    max-height: 80vh;
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: translate(-50%, -50%) scale(0.95);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
+  }
+  .popup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .popup-header {
+    background: #3a3a3a;
+    color: white;
+    padding: 10px 14px;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor: move; /* shows drag cursor */
+    user-select: none;
+  }
+  .close-btn {
+    cursor:pointer;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  /* --- About popup content --- */
+  .popup-body.about {
+    padding: 20px;
+    overflow-y:auto;
+    font-size:0.9rem;
+    line-height:1.5;
+  }
+  .about img {
+    width: 80px;
+    border-radius:50%;
+    display:block;
+    margin:0 auto 12px;
+  }
+  .about h2 {
+    color:#ff9a00;
+    margin-bottom: 0;
+    text-align:center;
+  }
+  .about p {
+    margin: 8px 0;
+  }
+
+  /* --- Links popup content --- */
+  .popup-body.links {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 18px;
+    justify-items: center;
+    align-items: center;
+  }
+  .link-item {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-decoration:none;
+    color:#333;
+    font-size: 0.8rem;
+  }
+  .link-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 6px;
+  }
+  .link-item:hover { text-decoration:underline; }
+  .popup-footer {
+    padding: 12px;
+    text-align:center;
+    font-size: 0.8rem;
+    background: #fafafa;
+    border-top: 1px solid #e0e0e0;
+    color:#555;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Main card -->
+  <div class="card">
+    <div class="navbar">home</div>
+    <div class="card-content">
+      <h1>hi! <span style="color:#3686e2">I’m James</span></h1>
+      <p>illustrator, animator, and developer</p>
+
+      <div class="menu">
+        <div class="menu-item" id="openAbout">
+          <img src="about-icon.png" alt="about">
+          about
+        </div>
+        <div class="menu-item" id="openLinks">
+          <img src="links-icon.png" alt="links">
+          links
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About popup -->
+  <div class="popup" id="aboutPopup">
+    <div class="popup-header">
+      about <span class="close-btn" data-close="aboutPopup">[x]</span>
+    </div>
+    <div class="popup-body about">
+      <img src="https://cdn.discordapp.com/attachments/1130710011467792464/1418894339987345468/Untitled18_20250920173823.png?ex=68d07094&is=68cf1f14&hm=168ed511de2a19c8c40ae4c3ff08fbc62de8bd829cfa7a9752f162b1a747bb24&" alt="avatar">
+      <h2>James (@.thebananaman_)</h2>
+      <p>a Filipino illustrator, animator and<br>
+      a newbie at web developing</p>
+      <p>hi! i'm James, an animator and illustrator. i...</p>
+      <ul>
+        <li>create <a href="#">hand-drawn animations</a></li>
+        <li>create <a href="#">videos</a> about school logs</li>
+        <li>create website wireframes</li>
+        <li>do frontend web development!</li>
+      </ul>
+      <p>I'm currently working on a project, I'll probably send it in discord! :)</p>
+    </div>
+  </div>
+
+  <!-- Links popup -->
+  <div class="popup" id="linksPopup">
+    <div class="popup-header">
+      links <span class="close-btn" data-close="linksPopup">[x]</span>
+    </div>
+    <div class="popup-body links">
+      <a class="link-item" href="#"><img src="icons/twitter.png"><span>twitter</span></a>
+      <a class="link-item" href="#"><img src="icons/youtube.png"><span>youtube</span></a>
+      <a class="link-item" href="#"><img src="icons/kofi.png"><span>ko-fi</span></a>
+      <a class="link-item" href="#"><img src="icons/discord.png"><span>discord</span></a>
+      <a class="link-item" href="#"><img src="icons/instagram.png"><span>instagram</span></a>
+    </div>
+    <div class="popup-footer">clicking any of the links will open a new tab!</div>
+  </div>
+
+<script>
+  function openPopup(id){
+    const popup = document.getElementById(id);
+    popup.style.display = "flex";
+    requestAnimationFrame(()=> popup.classList.add("show"));
+  }
+  function closePopup(id){
+    const popup = document.getElementById(id);
+    popup.classList.remove("show");
+    setTimeout(()=> popup.style.display = "none", 200);
+  }
+
+  document.getElementById("openAbout").onclick = () => openPopup("aboutPopup");
+  document.getElementById("openLinks").onclick = () => openPopup("linksPopup");
+  document.querySelectorAll(".close-btn").forEach(btn => {
+    btn.addEventListener("click", ()=> closePopup(btn.dataset.close));
+  });
+
+  // --- Dragging Logic ---
+  document.querySelectorAll(".popup").forEach(popup => {
+    const header = popup.querySelector(".popup-header");
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
+
+    header.addEventListener("mousedown", e => {
+      isDragging = true;
+      const rect = popup.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      popup.style.transition = "none"; // disable animation while dragging
+    });
+
+    document.addEventListener("mousemove", e => {
+      if (!isDragging) return;
+      popup.style.left = e.clientX - offsetX + "px";
+      popup.style.top = e.clientY - offsetY + "px";
+      popup.style.transform = "translate(0, 0) scale(1)";
+    });
+
+    document.addEventListener("mouseup", () => isDragging = false);
+  });
+</script>
+
+</body>
+</html>
